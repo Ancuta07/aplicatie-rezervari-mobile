@@ -23,7 +23,11 @@ export default function AppNavigator() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Saloane" component={Saloane} />
             <Stack.Screen name="Rezervari" component={Rezervari} />
-            <Stack.Screen name="Despre" component={Despre} />
+            <Stack.Screen
+              name="Despre"
+              component={Despre}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </View>
 

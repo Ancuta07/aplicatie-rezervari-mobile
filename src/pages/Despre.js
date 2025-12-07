@@ -7,65 +7,31 @@ export default function Despre() {
 
       <Text style={styles.intro}>
         SalonFinder este o aplicație modernă creată pentru a simplifica procesul
-        de rezervare la saloanele de înfrumusețare. Indiferent că ai nevoie de
-        un tuns, un masaj, un tratament facial sau o programare rapidă la
-        manichiură, platforma îți oferă acces instant la cele mai bune saloane
-        din orașul tău.
+        de rezervare la saloanele de înfrumusețare...
       </Text>
 
       <View style={styles.box}>
         <Text style={styles.subtitle}>Ce oferă aplicația?</Text>
-
-        <Text style={styles.text}>
-          ✔️ O listă selectată de saloane cu imagini reale și informații clare.
-        </Text>
-        <Text style={styles.text}>
-          ✔️ Filtre rapide după nume, oraș și servicii.
-        </Text>
-        <Text style={styles.text}>
-          ✔️ Rezervări intuitive în câteva secunde.
-        </Text>
-        <Text style={styles.text}>
-          ✔️ O experiență modernă, rapidă și plăcută.
-        </Text>
+        <Text style={styles.text}>✔️ Listă de saloane cu imagini reale.</Text>
+        <Text style={styles.text}>✔️ Filtre după nume, oraș și servicii.</Text>
+        <Text style={styles.text}>✔️ Rezervări în câteva secunde.</Text>
+        <Text style={styles.text}>✔️ Experiență modernă și ușoară.</Text>
       </View>
 
       <View style={styles.box}>
         <Text style={styles.subtitle}>De ce este o alegere excelentă?</Text>
-
         <Text style={styles.text}>
-          SalonFinder elimină telefoanele, căutările lungi și programările
-          dificile. Totul este centralizat într-un singur loc: servicii,
-          imagini, ratinguri și disponibilitate.
-        </Text>
-
-        <Text style={[styles.text, styles.mt]}>
-          Scopul aplicației este să aducă simplitate acolo unde era nevoie: în
-          programările la salon. Rapid, eficient și accesibil oricui.
+          SalonFinder elimină telefoanele și căutările lungi...
         </Text>
       </View>
 
       <View style={styles.box}>
         <Text style={styles.subtitle}>De ce să folosești SalonFinder? ✨</Text>
-
-        <Text style={styles.text}>
-          💇‍♀️ Găsești rapid saloane de top – totul într-un singur loc.
-        </Text>
-        <Text style={styles.text}>
-          📍 Filtrare după oraș și servicii – vezi doar ce te interesează.
-        </Text>
-        <Text style={styles.text}>
-          🖼️ Prezentare vizuală clară – imagini reale și ratinguri actualizate.
-        </Text>
-        <Text style={styles.text}>
-          ⚡ Rezervare în câteva secunde – fără așteptări sau telefoane.
-        </Text>
-        <Text style={styles.text}>
-          ⭐ Experiență modernă și intuitivă – rapidă și fluidă.
-        </Text>
-        <Text style={styles.text}>
-          ❤️ Ideal pentru persoane ocupate – economisești timp prețios.
-        </Text>
+        <Text style={styles.text}>💇‍♀️ Găsești rapid saloane de top.</Text>
+        <Text style={styles.text}>📍 Filtrare inteligentă.</Text>
+        <Text style={styles.text}>🖼️ Prezentare vizuală clară.</Text>
+        <Text style={styles.text}>⚡ Rezervare rapidă.</Text>
+        <Text style={styles.text}>❤️ Economisești timp.</Text>
       </View>
     </ScrollView>
   );
@@ -99,8 +65,5 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 6,
-  },
-  mt: {
-    marginTop: 10,
   },
 });
