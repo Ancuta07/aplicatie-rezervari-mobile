@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
-// Import corect imagine
 const sfLogo = require("../../../assets/images/sf1.png");
 
 export default function Header() {
@@ -9,9 +8,12 @@ export default function Header() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoRow}>
+      <View style={styles.left}>
         <Image source={sfLogo} style={styles.logo} />
-        <Text style={styles.logoTitle}>SalonFinder</Text>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.titleTop}>Salon</Text>
+          <Text style={styles.titleBottom}>Finder</Text>
+        </View>
       </View>
 
       <View style={styles.nav}>
@@ -33,30 +35,55 @@ export default function Header() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     backgroundColor: "#fff",
-    elevation: 4,
+    elevation: 6,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
-  logoRow: {
+
+  left: {
     flexDirection: "row",
     alignItems: "center",
   },
+
   logo: {
-    width: 40,
-    height: 40,
+    width: 42,
+    height: 42,
+    borderRadius: 10,
     marginRight: 8,
   },
-  logoTitle: {
-    fontSize: 20,
-    fontWeight: "700",
+
+  titleWrapper: {
+    flexDirection: "column",
+    justifyContent: "center",
   },
+
+  titleTop: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#7a57d1",
+    lineHeight: 20,
+  },
+
+  titleBottom: {
+    fontSize: 22,
+    fontWeight: "900",
+    color: "#7a57d1",
+    lineHeight: 22,
+    marginTop: -3,
+  },
+
   nav: {
     flexDirection: "row",
-    gap: 20,
+    alignItems: "center",
+    gap: 22, // SPATIU MAI MARE între butoane
   },
+
   link: {
     fontSize: 16,
     fontWeight: "600",

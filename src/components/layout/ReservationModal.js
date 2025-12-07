@@ -8,10 +8,11 @@ import {
   TextInput,
   View,
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import { useReservations } from "../../context/ReservationContext";
 
 // -------------------------------
-// FUNCTION TO SEND EMAIL VIA EMAILJS REST API
+//  EMAIL TRIMITERE VIA EMAILJS
 // -------------------------------
 async function sendEmail(data) {
   const serviceID = "service_h6e4sxz";
@@ -33,8 +34,6 @@ async function sendEmail(data) {
     },
   };
 
-  console.log("TRIMIT EMAIL CU EMAILJS...", payload);
-
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -42,12 +41,8 @@ async function sendEmail(data) {
       body: JSON.stringify(payload),
     });
 
-    console.log("RESPONSE EMAIL:", response.status);
-
-    if (response.ok) {
-      console.log("Email trimis cu succes!");
-    } else {
-      console.log("Eroare la trimiterea emailului:", await response.text());
+    if (!response.ok) {
+      console.log("Eroare email:", await response.text());
     }
   } catch (err) {
     console.log("Fetch error:", err);
@@ -57,9 +52,14 @@ async function sendEmail(data) {
 export default function ReservationModal({ salon, onClose }) {
   const { addReservation } = useReservations();
 
-  const [selectedCity, setSelectedCity] = useState("");
+  // dropdown states
+  const [cityOpen, setCityOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [cityItems, setCityItems] = useState([]);
+
   const [email, setEmail] = useState("");
 
+  // date & time
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
 
@@ -68,19 +68,33 @@ export default function ReservationModal({ salon, onClose }) {
 
   const [confirmed, setConfirmed] = useState(false);
 
+  // când se schimbă salonul → resetăm formularul
   useEffect(() => {
     if (salon) {
       setConfirmed(false);
-      setSelectedCity("");
       setEmail("");
       setDate(new Date());
       setTime(new Date());
+      setSelectedCity(null);
+
+      // generăm itemele pentru dropdown
+      setCityItems(
+        salon.city.map((c) => ({
+          label: c,
+          value: c,
+        }))
+      );
     }
   }, [salon]);
 
   if (!salon) return null;
 
   const handleSubmit = async () => {
+    if (!selectedCity || !email) {
+      alert("Completează toate câmpurile.");
+      return;
+    }
+
     const reservation = {
       salonId: salon.id,
       name: salon.name,
@@ -90,13 +104,10 @@ export default function ReservationModal({ salon, onClose }) {
       email,
     };
 
-    // Salvează în Context
     addReservation(reservation);
 
-    // Trimite email
     await sendEmail(reservation);
 
-    // Afișează confirmare
     setConfirmed(true);
 
     setTimeout(() => onClose(), 1500);
@@ -112,12 +123,17 @@ export default function ReservationModal({ salon, onClose }) {
                 Rezervare la <Text style={styles.bold}>{salon.name}</Text>
               </Text>
 
-              {/* ORAȘ */}
-              <TextInput
-                placeholder="Oraș"
+              {/* ORAS dropdown */}
+              <DropDownPicker
+                open={cityOpen}
                 value={selectedCity}
-                onChangeText={setSelectedCity}
-                style={styles.input}
+                items={cityItems}
+                setOpen={setCityOpen}
+                setValue={setSelectedCity}
+                setItems={setCityItems}
+                placeholder="Alege orașul"
+                style={styles.dropdown}
+                dropDownContainerStyle={styles.dropdownContainer}
               />
 
               {/* DATA */}
@@ -192,23 +208,30 @@ const styles = StyleSheet.create({
   modalContent: {
     width: "100%",
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "600",
-    marginBottom: 12,
+    marginBottom: 16,
   },
   bold: {
-    fontWeight: "700",
+    fontWeight: "800",
+  },
+  dropdown: {
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  dropdownContainer: {
+    borderRadius: 10,
   },
   input: {
     padding: 12,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
-    marginBottom: 10,
+    borderRadius: 10,
+    marginBottom: 12,
     backgroundColor: "#f9f9f9",
   },
   row: {
@@ -220,7 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     backgroundColor: "#999",
-    borderRadius: 8,
+    borderRadius: 10,
     marginRight: 6,
     alignItems: "center",
   },
@@ -228,7 +251,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     backgroundColor: "#7a57d1",
-    borderRadius: 8,
+    borderRadius: 10,
     marginLeft: 6,
     alignItems: "center",
   },
@@ -237,7 +260,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   success: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "700",
     textAlign: "center",
     padding: 20,

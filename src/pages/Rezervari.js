@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 10,
+    gap: 12,
   },
   card: {
     backgroundColor: "#fff",
     padding: 16,
-    marginBottom: 12,
     borderRadius: 10,
     elevation: 3,
   },
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 16,
-    marginBottom: 3,
+    marginBottom: 4,
   },
 });
