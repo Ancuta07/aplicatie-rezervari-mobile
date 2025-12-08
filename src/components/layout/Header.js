@@ -28,6 +28,10 @@ export default function Header() {
         <Pressable onPress={() => navigation.navigate("Despre")}>
           <Text style={styles.link}>Despre</Text>
         </Pressable>
+
+        <Pressable onPress={() => navigation.navigate("Harta")}>
+          <Text style={styles.link}>Hartă</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -42,8 +46,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
 
   left: {
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 22, // SPATIU MAI MARE între butoane
+    gap: 22, // spațiu între butoane
   },
 
   link: {

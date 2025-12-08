@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Despre from "./pages/Despre";
+import Harta from "./pages/Harta";
 import Rezervari from "./pages/Rezervari";
 import Saloane from "./pages/Saloane";
 
@@ -21,6 +22,7 @@ export default function AppNavigator() {
         {/* PAGINI */}
         <View style={styles.content}>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Harta" component={Harta} />
             <Stack.Screen name="Saloane" component={Saloane} />
             <Stack.Screen name="Rezervari" component={Rezervari} />
             <Stack.Screen

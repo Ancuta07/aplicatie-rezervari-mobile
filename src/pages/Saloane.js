@@ -47,7 +47,7 @@ export default function Saloane() {
   return (
     <ScrollView
       contentContainerStyle={styles.pageContainer}
-      keyboardShouldPersistTaps="handled" // IMPORTANT PENTRU IOS
+      keyboardShouldPersistTaps="handled"
     >
       <Text style={styles.title}>Saloane disponibile</Text>
 
@@ -75,6 +75,8 @@ export default function Saloane() {
           dropDownContainerStyle={styles.dropdownContainer}
           zIndex={2500}
           zIndexInverse={2500}
+          // 🔑 Asta îl face să NU mai folosească FlatList
+          listMode="SCROLLVIEW"
         />
       </View>
 
@@ -92,6 +94,7 @@ export default function Saloane() {
           dropDownContainerStyle={styles.dropdownContainer}
           zIndex={2000}
           zIndexInverse={2000}
+          listMode="SCROLLVIEW" // la fel și aici
         />
       </View>
 

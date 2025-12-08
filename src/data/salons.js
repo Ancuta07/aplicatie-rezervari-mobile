@@ -1,3 +1,12 @@
+// 🗺️ Coordonate pentru orașele din România
+const cityCoords = {
+  "București": { latitude: 44.4268, longitude: 26.1025 },
+  "Cluj-Napoca": { latitude: 46.7712, longitude: 23.6236 },
+  "Brașov": { latitude: 45.6579, longitude: 25.6012 },
+  "Timișoara": { latitude: 45.7557, longitude: 21.2268 },
+  "Iași": { latitude: 47.1585, longitude: 27.6014 },
+};
+
 const salons = [
   {
     id: 1,
@@ -55,7 +64,7 @@ const salons = [
     id: 6,
     name: "Barber Pro",
     city: ["Brașov", "Timișoara", "Iași"],
-    description: "Tunsori bărbătești moderne și bărbierit tradițional",
+    description: "Tuns bărbătești moderne și bărbierit tradițional",
     image: require("../../assets/images/salon6.png"),
     rating: 4.9,
     services: ["tuns", "barbierit", "contur", "styling barba"],
@@ -63,3 +72,5 @@ const salons = [
 ];
 
 export default salons;
+export { cityCoords };
+
