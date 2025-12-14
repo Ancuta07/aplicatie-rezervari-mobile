@@ -1,53 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useReservations } from "../../context/ReservationContext";
-
-// -------------------------------
-//  EMAIL TRIMITERE VIA EMAILJS
-// -------------------------------
-async function sendEmail(data) {
-  const serviceID = "service_h6e4sxz";
-  const templateID = "template_4cnvq9l";
-  const publicKey = "6N-JLSkSoMv-ilrUj";
-
-  const url = "https://api.emailjs.com/api/v1.0/email/send";
-
-  const payload = {
-    service_id: serviceID,
-    template_id: templateID,
-    user_id: publicKey,
-    template_params: {
-      to_email: data.email,
-      salon_name: data.name,
-      city: data.city,
-      date: data.date,
-      time: data.time,
-    },
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      console.log("Eroare email:", await response.text());
-    }
-  } catch (err) {
-    console.log("Fetch error:", err);
-  }
-}
 
 export default function ReservationModal({ salon, onClose }) {
   const { addReservation } = useReservations();
@@ -56,8 +11,6 @@ export default function ReservationModal({ salon, onClose }) {
   const [cityOpen, setCityOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
   const [cityItems, setCityItems] = useState([]);
-
-  const [email, setEmail] = useState("");
 
   // date & time
   const [date, setDate] = useState(new Date());
@@ -68,49 +21,50 @@ export default function ReservationModal({ salon, onClose }) {
 
   const [confirmed, setConfirmed] = useState(false);
 
-  // când se schimbă salonul → resetăm formularul
   useEffect(() => {
-    if (salon) {
-      setConfirmed(false);
-      setEmail("");
-      setDate(new Date());
-      setTime(new Date());
-      setSelectedCity(null);
+    if (!salon) return;
 
-      // generăm itemele pentru dropdown
-      setCityItems(
-        salon.city.map((c) => ({
-          label: c,
-          value: c,
-        }))
-      );
-    }
+    setConfirmed(false);
+    setDate(new Date());
+    setTime(new Date());
+    setSelectedCity(null);
+
+    setCityItems(
+      salon.city.map((c) => ({
+        label: c,
+        value: c,
+      }))
+    );
   }, [salon]);
 
   if (!salon) return null;
 
   const handleSubmit = async () => {
-    if (!selectedCity || !email) {
-      alert("Completează toate câmpurile.");
+    if (!selectedCity) {
+      alert("Selectează orașul.");
       return;
     }
 
     const reservation = {
       salonId: salon.id,
-      name: salon.name,
+      salonName: salon.name,
       city: selectedCity,
-      date: date.toDateString(),
-      time: time.toLocaleTimeString(),
-      email,
+      date: date.toISOString().split("T")[0],
+      time: time.toLocaleTimeString("ro-RO", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
-    addReservation(reservation);
+    const success = await addReservation(reservation);
 
-    await sendEmail(reservation);
+    if (!success) {
+      alert("Rezervarea nu a putut fi salvată.");
+      return;
+    }
 
     setConfirmed(true);
-
-    setTimeout(() => onClose(), 1500);
+    setTimeout(onClose, 1500);
   };
 
   return (
@@ -120,10 +74,10 @@ export default function ReservationModal({ salon, onClose }) {
           {!confirmed ? (
             <>
               <Text style={styles.title}>
-                Rezervare la <Text style={styles.bold}>{salon.name}</Text>
+                Rezervare la
+                <Text style={styles.bold}>{salon.name}</Text>
               </Text>
 
-              {/* ORAS dropdown */}
               <DropDownPicker
                 open={cityOpen}
                 value={selectedCity}
@@ -134,9 +88,10 @@ export default function ReservationModal({ salon, onClose }) {
                 placeholder="Alege orașul"
                 style={styles.dropdown}
                 dropDownContainerStyle={styles.dropdownContainer}
+                zIndex={3000}
+                zIndexInverse={1000}
               />
 
-              {/* DATA */}
               <Pressable onPress={() => setShowDate(true)} style={styles.input}>
                 <Text>Alege data: {date.toDateString()}</Text>
               </Pressable>
@@ -152,9 +107,14 @@ export default function ReservationModal({ salon, onClose }) {
                 />
               )}
 
-              {/* ORA */}
               <Pressable onPress={() => setShowTime(true)} style={styles.input}>
-                <Text>Alege ora: {time.toLocaleTimeString()}</Text>
+                <Text>
+                  Alege ora:
+                  {time.toLocaleTimeString("ro-RO", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Text>
               </Pressable>
 
               {showTime && (
@@ -168,16 +128,6 @@ export default function ReservationModal({ salon, onClose }) {
                 />
               )}
 
-              {/* EMAIL */}
-              <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                style={styles.input}
-              />
-
-              {/* BUTOANE */}
               <View style={styles.row}>
                 <Pressable onPress={onClose} style={styles.cancelButton}>
                   <Text style={styles.btnText}>Anulează</Text>
@@ -189,13 +139,15 @@ export default function ReservationModal({ salon, onClose }) {
               </View>
             </>
           ) : (
-            <Text style={styles.success}>Rezervarea a fost trimisă!</Text>
+            <Text style={styles.success}>Rezervarea a fost salvată!</Text>
           )}
         </View>
       </View>
     </Modal>
   );
 }
+
+/* ================= STYLES ================= */
 
 const styles = StyleSheet.create({
   overlay: {
@@ -222,9 +174,11 @@ const styles = StyleSheet.create({
   dropdown: {
     borderRadius: 10,
     marginBottom: 12,
+    zIndex: 3000,
   },
   dropdownContainer: {
     borderRadius: 10,
+    zIndex: 3000,
   },
   input: {
     padding: 12,
